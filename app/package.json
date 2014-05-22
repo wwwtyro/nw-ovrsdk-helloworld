@@ -1,0 +1,9 @@
+{
+    "name": "nw-demo",
+    "main": "index.html",
+    "chromium-args": "--disable-gpu-vsync --ignore-gpu-blacklist",
+    "window": {
+        "toolbar": false,
+        "fullscreen": true
+    }
+}
