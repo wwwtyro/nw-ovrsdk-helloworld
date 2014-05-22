@@ -1,6 +1,6 @@
+## Node-webkit + THREE.js + node-ovrsdk Tutoral
 
-_Note: I'm using MinGW/msys here so that it'll be easier to make this tutorial cross-platform when 
-the SDK is updated._
+* _Note: I'm using MinGW/msys here so that it's easier to make this tutorial cross-platform. You'll need to apply your preferred tools appropriately._
 
 #### Prerequisites
 
@@ -15,7 +15,7 @@ First, lets go into the app directory:
 cd app
 ```
 
-This is where you'll be organizing your app. All your assets and code should be organized here. 
+This is where you'll be organizing your app. All your assets and code should be placed here. 
 
 Next, let's install node-ovrsdk:
 
@@ -26,21 +26,21 @@ npm install node-ovrsdk
 This will download node-ovrsdk, place it into the app/node_modules directory, and compile some 
 dependencies with node-gyp. Unfortunately, binaries compiled with node-gyp are not compatible with 
 the version of node-webkit that is compatible with node-ovrsdk. We'll need to compile it with 
-nw-gyp, which is a node-webkit compatible version of node-gyp. Let's install nw-gyp globally:
+nw-gyp, which is a node-webkit compatible version of node-gyp. Let's first install nw-gyp globally:
 
 ```
 npm install -g nw-gyp
 ```
 
-Next, we'll compile the node-ovrsdk dependencies by going entering their paths and running nw-gyp.
-First, the ffi dependency:
+Next, we'll compile the node-ovrsdk dependencies by entering their directories and running nw-gyp.
+First, the ```ffi``` dependency:
 
 ```
 cd node_modules/node-ovrsdk/node_modules/ffi
 nw-gyp rebuild --target=0.8.6
 ```
 
-Then the ref dependency:
+Then the ```ref``` dependency:
 
 ```
 cd ../ref
@@ -60,7 +60,7 @@ Find the download appropriate for your platform, download it, unzip it, and drop
 the root of this repo (the directory above the app directory). There's definitely a better way to
 organize all these files, but this will do for our purposes.
 
-#### Compiling & running your app
+#### Building & Running
 
 Node-webkit distributes a binary that is intended to be executed with your zipped app as a 
 parameter. Let's first prepare your zipped app (remember, we are in the app/ directory):
@@ -80,7 +80,7 @@ nw.exe app.nw
 With any luck, you'll be presented with a view of Earth, rendered appropriately for view
 in the Rift.
 
-## The node-webkit hello world app
+### The Code
 
 Let's take a look at the important bits of the code, next.
 
@@ -99,7 +99,7 @@ filled the screen with our rendered content. Finally, we include a canvas elemen
 
 #### main.js
 
-I'll leave learning how to use THREE.js as an exercise to the user. Here I'll focus on the parts
+I'll leave learning how to use THREE.js as an exercise to the reader. Here I'll focus on the parts
 that are specific to creating games and applications for the Rift. First, we'll look at the imports:
 
 ```javascript
@@ -119,7 +119,9 @@ orientation of the Rift while we're rendering.
     hmd = libovr.ovrHmd_Create(0);
     var desc = new libovr.ovrHmdDesc;
     libovr.ovrHmd_GetDesc(hmd, desc.ref());
-    libovr.ovrHmd_StartSensor(hmd, libovr.ovrHmdCap_Orientation, libovr.ovrHmdCap_Orientation);
+    libovr.ovrHmd_StartSensor(hmd, 
+                              libovr.ovrHmdCap_Orientation, 
+                              libovr.ovrHmdCap_Orientation);
 ```
 
 Next we create a THREE.js renderer and connect an OculusRiftEffect to it:
@@ -136,7 +138,7 @@ Next we create a THREE.js renderer and connect an OculusRiftEffect to it:
     renderCanvas.style.width = renderCanvas.style.height = "100%";
 ```
 
-Note that we're setting the size of riftRenderer to 1280x800. I'm hardcoding this here for ease
+Note that we're setting the size of ```riftRenderer``` to 1280x800. I'm hardcoding this here for ease
 and clarity, but it would be best to use node-ovrsdk to get the correct resolution. There are a
 number of parameters like this, and I'll leave it to the reader to take a look at the SDK docs and
 the OculusRiftEffect.js source to figure out how to handle these as they find the need. For now,
@@ -144,7 +146,7 @@ the defaults provided will work fine with DK1.
 
 Also note that we are scaling the canvas to 100%. This is to ensure that it fills our screen.
 
-After that comes the scene setup, which we'll skip here. Then some keyboard events that are relevant
+After that comes the THREE.js scene setup, which we'll skip here. Then some keyboard events that are relevant
 to us:
 
 ```javascript
@@ -157,7 +159,7 @@ to us:
 ```
 
 Here we've use the escape key to exit the program and the spacebar to reset the HMD sensor, which
-will re-center the scene for the viewer.
+will recenter the scene for the viewer.
 
 Next, we kick off the rendering loop. We'll want to adjust the THREE.js camera orientation to 
 match the orientation of the Rift. Here's how we'll do that:
@@ -172,7 +174,7 @@ Here, hmd is the ovrHmd object we created during initialization, and ovr_GetTime
 a timestamp for sampling from the sensor device. With DK2 and CV1, you'll also want to get position
 information. I'll update this when I get mine, but this will work for DK1 in the meantime.
 
-Finally, we use the riftRenderer to render the scene appropriately:
+Finally, we use the ```riftRenderer``` to render the scene appropriately:
 
 ```javascript
     riftRenderer.render(scene, camera);
@@ -197,13 +199,13 @@ package.json file in full:
 
 * main - points to the html file from which our app/game will be kicked off
 * chromium-args
-** --disable-gpu-vsync - Ensure we're running at a high framerate. You might want
+  * --disable-gpu-vsync - Ensure we're running at a high framerate. You might want
 to experiment with this.
-** --ignore-gpu-blacklist - I've had video cards that work just fine and dandy with WebGL, but
+  * --ignore-gpu-blacklist - I've had video cards that work just fine and dandy with WebGL, but
 couldn't because they were blacklisted. Let's disable this so that more people can use our app/game.
 * window
-** toolbar - Set this to true for easy access to the console. For production, you'll want it off.
-** fullscreen - I hope you already know what this means.
+  * toolbar - Set this to true for easy access to the console. For production, you'll want it off.
+  * fullscreen - I hope you already know what this means.
 
 ### Final notes
 
