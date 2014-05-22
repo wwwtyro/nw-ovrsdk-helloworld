@@ -1,6 +1,8 @@
 ## Node-webkit + THREE.js + node-ovrsdk Tutoral
 
-* _Note: I'm using MinGW/msys here so that it's easier to make this tutorial cross-platform. You'll need to apply your preferred tools appropriately._
+#### Notes
+* This will only work on Windows until we get the cross-platform SDK and I port to Linux/OSX.
+* I'm using MinGW/msys here so that it's easier to make this tutorial cross-platform. You'll need to apply your preferred tools appropriately.
 
 #### Prerequisites
 
