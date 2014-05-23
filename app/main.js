@@ -62,10 +62,6 @@ window.onload = function () {
 }
 
 
-function initScene() {
-}
-
-
 function animate(dt) {
     requestAnimationFrame(animate);
     planetMesh.rotation.y = dt * 0.0001;
